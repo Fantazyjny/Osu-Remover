@@ -1,61 +1,90 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace Osu_Remover_FirstAttempt
+namespace Osu_Remover
 {
     class Program
     {
         static void Main(string[] args)
         {
-            string rootFolderName = "C:\\Users\\damia\\Desktop\\TEST";
-            string[] folderPaths = Directory.GetDirectories(rootFolderName);
-            int folderPathsArraySize = folderPaths.Length;
+            string appDirPath = Directory.GetCurrentDirectory();
 
-
-            Console.WriteLine("Liczba folderów do skanowania: " + folderPathsArraySize);
-            for (int i = 0; i < folderPathsArraySize; i++)
+            string[] filePatterns =
             {
-                Console.WriteLine("Skanowanie folderu: " + folderPaths[i]);
+                "*.mp4",
+                "*.osb",
+                "soft-*.wav",
+                "normal-*.wav",
+                "drum-*.wav",
+                "taiko-soft-*.wav",
+                "taiko-normal-*.wav",
+                "taiko-drum-*.wav",
+                "count1s.wav",
+                "count2s.wav",
+                "count3s.wav",
+                "gos.wav",
+                "readys.wav",
+                "applause.wav",
+                "comboburst.wav",
+                "combobreak.wav",
+                "failsound.wav",
+                "sectionpass.wav",
+                "sectionfail.wav",
+                "pause-loop.wav",
+                "spinnerspin.wav",
+                "spinnerbonus.wav",
+                "comboburst.png",
+                "default-*.png",
+                "approachcircle.png",
+                "hitcircle.png",
+                "hitcircleoverlay*.png",
+                "followpoint.png",
+                "lighting.png",
+                "sliderstartcircle.png",
+                "sliderstartcircleoverlay*.png",
+                "sliderendcircle.png",
+                "sliderendcircleoverlay*.png",
+                "reversearrow.png",
+                "sliderfollowcircle*.png",
+                "sliderb*.png",
+                "sliderb-nd.png",
+                "sliderb-spec.png",
+                "sliderpoint*.png",
+                "sliderscorepoint.png",
+                "spinner-background.png",
+                "spinner-circle.png",
+                "spinner-metre.png",
+                "spinner-osu.png",
+                "spinner-bottom.png",
+                "spinner-glow.png",
+                "spinner-middle.png",
+                "spinner-top.png",
+                "spinner-approachcircle.png",
+                "spinner-rpm.png",
+                "spinner-clear.png",
+                "spinner-spin.png",
+                "particle*.png"
+            };
 
-
-                string[] softSoundFiles = Directory.GetFiles(folderPaths[i], "soft-*.wav");
-                int softSoundFilesLength = softSoundFiles.Length;
-                for (int j = 0; j < softSoundFilesLength; j++)
-                {
-                    Console.WriteLine(softSoundFiles[j]);
-                }
-
-                string[] drumSoundFiles = Directory.GetFiles(folderPaths[i], "drum-*.wav");
-                int drumSoundFilesLength = softSoundFiles.Length;
-                for (int k = 0; k < drumSoundFilesLength; k++)
-                {
-                    Console.WriteLine(k);
-                    Console.WriteLine(drumSoundFiles[k]);
-                }
-
-                string[] normalSoundFiles = Directory.GetFiles(folderPaths[i], "normal-*.wav");
-                int normalSoundFilesLength = normalSoundFiles.Length;
-                for (int l = 0; l < normalSoundFilesLength; l++)
-                {
-                    Console.WriteLine(normalSoundFiles[l]);
-                }
-
-
-
-
-
-                Console.WriteLine("\n#######################################################\n");
+            for (int i = 0; i < filePatterns.Length; i++)
+            {
+                Parallel.ForEach(Directory.EnumerateFiles(appDirPath, filePatterns[i], System.IO.SearchOption.AllDirectories).AsParallel(), Item =>
+                            {
+                                File.Delete(Item);
+                            });
+                Console.WriteLine("Delete: " + filePatterns[i]);
             }
-            Console.ReadKey();
 
-            //string[] filePathsArray = Directory.GetFiles(@"C:\Users\damia\Desktop\test_folder\", "*", SearchOption.AllDirectories);
-            //foreach (string str in filePathsArray) Console.WriteLine(str);
-            //Console.WriteLine("Press any key to exit...");
-            //Console.ReadKey();
+            string[] SBfolder = Directory.GetDirectories(appDirPath, "sb", System.IO.SearchOption.AllDirectories);
+            for (int i = 0; i < SBfolder.Length; i++)
+            {
+                Directory.Delete(SBfolder[i], true);
+                Console.WriteLine("Delete dir: " + SBfolder[i]);
+            }
+            Console.WriteLine("Done!");
+            Console.ReadKey();
         }
     }
 }
